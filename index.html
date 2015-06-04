@@ -236,6 +236,8 @@
 
         <script src='js/lib/locale.js'></script>
         <script src='data/introGraph.js'></script>
+        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="http://localhost:3008/socket.io/socket.io.js"></script>
     </head>
     <body>
         <div id='id-container'></div>
@@ -267,6 +269,9 @@
                         ]));
 
             });
+        </script>
+        <script>
+            var socket = io('http://localhost:3008/');
         </script>
     </body>
 </html>
