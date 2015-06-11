@@ -1,9 +1,9 @@
 iD.Background = function(context) {
     var dispatch = d3.dispatch('change'),
         baseLayer = iD.TileLayer()
-            .projection(context.projection),
+        .projection(context.projection),
         gpxLayer = iD.GpxLayer(context, dispatch)
-            .projection(context.projection),
+        .projection(context.projection),
         mapillaryLayer = iD.MapillaryLayer(context),
         overlayLayers = [];
 
@@ -17,7 +17,9 @@ iD.Background = function(context) {
 
     function updateImagery() {
         var b = background.baseLayerSource(),
-            o = overlayLayers.map(function (d) { return d.source().id; }).join(','),
+            o = overlayLayers.map(function(d) {
+                return d.source().id;
+            }).join(','),
             q = iD.util.stringQs(location.hash.substring(1));
 
         var id = b.id;
@@ -41,7 +43,7 @@ iD.Background = function(context) {
 
         var imageryUsed = [b.imageryUsed()];
 
-        overlayLayers.forEach(function (d) {
+        overlayLayers.forEach(function(d) {
             var source = d.source();
             if (!source.isLocatorOverlay()) {
                 imageryUsed.push(source.imageryUsed());
@@ -59,16 +61,27 @@ iD.Background = function(context) {
         var base = selection.selectAll('.background-layer')
             .data([0]);
 
+
+        base.enter().insert('div', '.layer-diff')
+            .attr('class', '');
         base.enter().insert('div', '.layer-data')
             .attr('class', 'layer-layer background-layer');
+
+
 
         base.call(baseLayer);
 
         var overlays = selection.selectAll('.layer-overlay')
-            .data(overlayLayers, function(d) { return d.source().name(); });
+            .data(overlayLayers, function(d) {
+                return d.source().name();
+            });
+
+        overlays.enter().insert('div', '.layer-diff')
+            .attr('class', 'layer-layer layer-overlay');
 
         overlays.enter().insert('div', '.layer-data')
             .attr('class', 'layer-layer layer-overlay');
+
 
         overlays.each(function(layer) {
             d3.select(this).call(layer);
@@ -182,11 +195,15 @@ iD.Background = function(context) {
     background.showsLayer = function(d) {
         return d === baseLayer.source() ||
             (d.id === 'custom' && baseLayer.source().id === 'custom') ||
-            overlayLayers.some(function(l) { return l.source() === d; });
+            overlayLayers.some(function(l) {
+                return l.source() === d;
+            });
     };
 
     background.overlayLayerSources = function() {
-        return overlayLayers.map(function (l) { return l.source(); });
+        return overlayLayers.map(function(l) {
+            return l.source();
+        });
     };
 
     background.toggleOverlayLayer = function(d) {

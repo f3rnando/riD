@@ -7,7 +7,8 @@
     child and parent relationships.
  */
 iD.Difference = function(base, head) {
-    var changes = {}, length = 0;
+    var changes = {},
+        length = 0;
 
     function changed(h, b) {
         return h !== b && !_.isEqual(_.omit(h, 'v'), _.omit(b, 'v'));
@@ -16,7 +17,10 @@ iD.Difference = function(base, head) {
     _.each(head.entities, function(h, id) {
         var b = base.entities[id];
         if (changed(h, b)) {
-            changes[id] = {base: b, head: h};
+            changes[id] = {
+                base: b,
+                head: h
+            };
             length++;
         }
     });
@@ -24,7 +28,10 @@ iD.Difference = function(base, head) {
     _.each(base.entities, function(b, id) {
         var h = head.entities[id];
         if (!changes[id] && changed(h, b)) {
-            changes[id] = {base: b, head: h};
+            changes[id] = {
+                base: b,
+                head: h
+            };
             length++;
         }
     });
@@ -110,7 +117,7 @@ iD.Difference = function(base, head) {
                 addEntity(change.base, base, 'deleted');
 
             } else if (change.base && change.head) { // modified vertex
-                var moved    = !_.isEqual(change.base.loc,  change.head.loc),
+                var moved = !_.isEqual(change.base.loc, change.head.loc),
                     retagged = !_.isEqual(change.base.tags, change.head.tags);
 
                 if (moved) {
@@ -133,7 +140,8 @@ iD.Difference = function(base, head) {
     };
 
     difference.complete = function(extent) {
-        var result = {}, id, change;
+        var result = {},
+            id, change;
 
         for (id in changes) {
             change = changes[id];
@@ -168,7 +176,11 @@ iD.Difference = function(base, head) {
             addParents(head.parentWays(entity), result);
             addParents(head.parentRelations(entity), result);
         }
-
+        //console.log(extent);
+        //socket.emit('diff-result', {
+        //    'diff': result,
+        //    'from': ''
+        //});
         return result;
     };
 

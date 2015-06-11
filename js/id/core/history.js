@@ -1,8 +1,12 @@
 iD.History = function(context) {
+
+
+
     var stack, index, tree,
         imageryUsed = ['Bing'],
         dispatch = d3.dispatch('change', 'undone', 'redone'),
         lock = iD.util.SessionMutex('lock');
+
 
     function perform(actions) {
         actions = Array.prototype.slice.call(actions);
@@ -27,6 +31,22 @@ iD.History = function(context) {
 
     function change(previous) {
         var difference = iD.Difference(previous, history.graph());
+        console.log(history.graph());
+        dispatch.change(difference);
+
+        // Realtime hijack
+        console.log('difference-out');
+        socket.emit('difference-out', {
+            'diff': history.graph(),
+            'from': ''
+        });
+        //
+        return difference;
+    }
+
+    function injectGraph(differencein) {
+        var difference = iD.Difference(stack[index].graph, differencein);
+        console.log(differencein);
         dispatch.change(difference);
         return difference;
     }
@@ -183,7 +203,9 @@ iD.History = function(context) {
         },
 
         reset: function() {
-            stack = [{graph: iD.Graph()}];
+            stack = [{
+                graph: iD.Graph()
+            }];
             index = 0;
             tree = iD.Tree(stack[0].graph);
             dispatch.change();
@@ -198,7 +220,8 @@ iD.History = function(context) {
                 base = stack[0];
 
             var s = stack.map(function(i) {
-                var modified = [], deleted = [];
+                var modified = [],
+                    deleted = [];
 
                 _.forEach(i.graph.entities, function(entity, id) {
                     if (entity) {
@@ -267,7 +290,8 @@ iD.History = function(context) {
                 }
 
                 stack = h.stack.map(function(d) {
-                    var entities = {}, entity;
+                    var entities = {},
+                        entity;
 
                     if (d.modified) {
                         d.modified.forEach(function(key) {
@@ -342,6 +366,16 @@ iD.History = function(context) {
         _getKey: getKey
 
     };
+
+    socket.on("difference-in", function(data) {
+        console.log(data);
+        //injectGraph(data.diff);
+    });
+    socket.on("diff-result-in", function(data) {
+        console.log('incoming diff');
+        console.log(JSON.stringify(data.diff));
+        injectGraph(data.diff);
+    });
 
     history.reset();
 
