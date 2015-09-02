@@ -42,6 +42,11 @@ iD.ui.MapData = function(context) {
             update();
         }
 
+        function clickRealtime() {
+            context.background().toggleRealtimeLayer();
+            update();
+        }
+
         function clickMapillary() {
             context.background().toggleMapillaryLayer();
             update();
