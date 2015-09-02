@@ -47,6 +47,11 @@ iD.ui.MapData = function(context) {
             update();
         }
 
+        function clickRealtime() {
+            context.background().toggleRealtimeLayer();
+            update();
+        }
+
         function drawList(selection, data, type, name, change, active) {
             var items = selection.selectAll('li')
                 .data(data);
@@ -261,6 +266,22 @@ iD.ui.MapData = function(context) {
         label.append('span')
             .text(t('gpx.local_layer'));
 
+        // realtime updates
+        var realtimeLayerItem = layerContainer.append('ul')
+            .attr('class', 'layer-list')
+            .append('li');
+
+        label = realtimeLayerItem.append('label')
+            .call(bootstrap.tooltip()
+                .title(t('realtime.tooltip'))
+                .placement('top'));
+
+        label.append('input')
+            .attr('type', 'checkbox')
+            .on('change', clickRealtime);
+
+        label.append('span')
+            .text(t('realtime.title'));
 
         // area fills
         content.append('a')
