@@ -61,12 +61,8 @@ iD.Background = function(context) {
         var base = selection.selectAll('.background-layer')
             .data([0]);
 
-
-        base.enter().insert('div', '.layer-diff')
-            .attr('class', '');
         base.enter().insert('div', '.layer-data')
             .attr('class', 'layer-layer background-layer');
-
 
 
         base.call(baseLayer);
@@ -75,9 +71,6 @@ iD.Background = function(context) {
             .data(overlayLayers, function(d) {
                 return d.source().name();
             });
-
-        overlays.enter().insert('div', '.layer-diff')
-            .attr('class', 'layer-layer layer-overlay');
 
         overlays.enter().insert('div', '.layer-data')
             .attr('class', 'layer-layer layer-overlay');
@@ -90,6 +83,15 @@ iD.Background = function(context) {
         overlays.exit()
             .remove();
 
+
+        var realtime = selection.selectAll('.layer-realtime').
+            .data([0]);
+
+        realtime.enter().insert('div')
+            .attr('class', 'layer-layer layer-realtime');
+
+        realtime.call(realtimeLayer);
+        
         var gpx = selection.selectAll('.layer-gpx')
             .data([0]);
 
@@ -116,6 +118,7 @@ iD.Background = function(context) {
     background.dimensions = function(_) {
         baseLayer.dimensions(_);
         gpxLayer.dimensions(_);
+        realtimeLayer.dimensions(_);
         mapillaryLayer.dimensions(_);
 
         overlayLayers.forEach(function(layer) {
@@ -141,8 +144,16 @@ iD.Background = function(context) {
         return !_.isEmpty(gpxLayer.geojson());
     };
 
+    background.hasRealtimeLayer = function() {
+        return true;
+    };
+
     background.showsGpxLayer = function() {
         return background.hasGpxLayer() && gpxLayer.enable();
+    };
+
+    background.showsRealtimeLayer = function() {
+        return background.hasRealtimeLayer() && realtimeLayer.enable();
     };
 
     function toDom(x) {
