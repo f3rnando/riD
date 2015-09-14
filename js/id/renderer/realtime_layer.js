@@ -5,7 +5,53 @@ iD.RealtimeLayer = function(context) {
         svg;
 
     function render(selection) {
-        
+        console.log('realtime-layer');
+        svg = selection.selectAll('svg')
+            .data([render]);
+
+        svg.enter()
+            .append('svg');
+
+        svg.style('display', enable ? 'block' : 'none');
+
+        var paths = svg
+            .selectAll('path')
+            .data([gj]);
+
+        paths
+            .enter()
+            .append('path')
+            .attr('class', 'gpx');
+
+        var path = d3.geo.path()
+            .projection(projection);
+
+        paths
+            .attr('d', path);
+
+        if (typeof gj.features !== 'undefined') {
+            svg
+                .selectAll('text')
+                .remove();
+
+            svg
+                .selectAll('path')
+                .data(gj.features)
+                .enter()
+                .append('text')
+                .attr('class', 'gpx')
+                .text(function(d) {
+                    return d.properties.desc || d.properties.name;
+                })
+                .attr('x', function(d) {
+                    var centroid = path.centroid(d);
+                    return centroid[0] + 5;
+                })
+                .attr('y', function(d) {
+                    var centroid = path.centroid(d);
+                    return centroid[1];
+                });
+        }
     }
 
     render.projection = function(_) {
