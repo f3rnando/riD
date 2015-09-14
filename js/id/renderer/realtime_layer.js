@@ -5,7 +5,7 @@ iD.RealtimeLayer = function(context) {
         svg;
 
     function render(selection) {
-        console.log('realtime-layer');
+        console.log(gj);
         svg = selection.selectAll('svg')
             .data([render]);
 
@@ -21,7 +21,7 @@ iD.RealtimeLayer = function(context) {
         paths
             .enter()
             .append('path')
-            .attr('class', 'gpx');
+            .attr('class', 'realtime');
 
         var path = d3.geo.path()
             .projection(projection);
@@ -39,7 +39,7 @@ iD.RealtimeLayer = function(context) {
                 .data(gj.features)
                 .enter()
                 .append('text')
-                .attr('class', 'gpx')
+                .attr('class', 'realtime')
                 .text(function(d) {
                     return d.properties.desc || d.properties.name;
                 })
@@ -67,6 +67,7 @@ iD.RealtimeLayer = function(context) {
     };
 
     render.geojson = function(_) {
+        console.log(arguments.length);
         if (!arguments.length) return gj;
         gj = _;
         return render;

@@ -36,9 +36,6 @@ iD.Map = function(context) {
 
         supersurface = selection.append('div')
             .attr('id', 'supersurface');
-        // Layer to display realtime changes from other clients
-        var realtimeLayer = supersurface.append('div')
-            .attr('class', 'layer-layer layer-realtime');
         // Need a wrapper div because Opera can't cope with an absolutely positioned
         // SVG element: http://bl.ocks.org/jfirebaugh/6fbfbd922552bf776c16
         var dataLayer = supersurface.append('div')

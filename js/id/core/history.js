@@ -7,7 +7,6 @@ iD.History = function(context) {
         dispatch = d3.dispatch('change', 'undone', 'redone'),
         lock = iD.util.SessionMutex('lock');
 
-
     function perform(actions) {
         actions = Array.prototype.slice.call(actions);
 
@@ -37,7 +36,7 @@ iD.History = function(context) {
         // Realtime hijack
         console.log('difference-out');
         socket.emit('difference-out', {
-            'diff': history.graph(),
+            'diff': difference,
             'from': ''
         });
         //
@@ -367,15 +366,6 @@ iD.History = function(context) {
 
     };
 
-    socket.on("difference-in", function(data) {
-        console.log(data);
-        //injectGraph(data.diff);
-    });
-    socket.on("diff-result-in", function(data) {
-        console.log('incoming diff');
-        console.log(JSON.stringify(data.diff));
-        injectGraph(data.diff);
-    });
 
     history.reset();
 
