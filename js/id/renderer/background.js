@@ -4,6 +4,8 @@ iD.Background = function(context) {
         .projection(context.projection),
         gpxLayer = iD.GpxLayer(context, dispatch)
         .projection(context.projection),
+        realtimeLayer = iD.RealtimeLayer(context, dispatch)
+        .projection(context.projection),
         mapillaryLayer = iD.MapillaryLayer(context),
         overlayLayers = [];
 
@@ -84,7 +86,7 @@ iD.Background = function(context) {
             .remove();
 
 
-        var realtime = selection.selectAll('.layer-realtime').
+        var realtime = selection.selectAll('.layer-realtime')
             .data([0]);
 
         realtime.enter().insert('div')
@@ -118,7 +120,7 @@ iD.Background = function(context) {
     background.dimensions = function(_) {
         baseLayer.dimensions(_);
         gpxLayer.dimensions(_);
-        realtimeLayer.dimensions(_);
+        //realtimeLayer.dimensions(_);
         mapillaryLayer.dimensions(_);
 
         overlayLayers.forEach(function(layer) {
