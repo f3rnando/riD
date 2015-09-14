@@ -11,6 +11,23 @@ iD.Background = function(context) {
 
     var backgroundSources;
 
+    socket.on("difference-in", function(data) {
+        var geometries = data.diff.transients;
+        var geometry, i, len;
+        for (var key in geometries) {
+            if(geometries.hasOwnProperty(key)){
+                var geometry = geometries[key];
+                //if(geometry.geometry == 'line') {
+                    realtimeLayer.geojson(geometry.GeoJSON);
+                    console.log('rendering realtime layer');
+                    //console.log(geometry.GeoJSON);
+                //}
+            }
+        }
+        
+        //injectGraph(data.diff);
+    });
+    
     function findSource(id) {
         return _.find(backgroundSources, function(d) {
             return d.id && d.id === id;
@@ -120,7 +137,7 @@ iD.Background = function(context) {
     background.dimensions = function(_) {
         baseLayer.dimensions(_);
         gpxLayer.dimensions(_);
-        //realtimeLayer.dimensions(_);
+        realtimeLayer.dimensions(_);
         mapillaryLayer.dimensions(_);
 
         overlayLayers.forEach(function(layer) {
@@ -202,6 +219,14 @@ iD.Background = function(context) {
 
     background.toggleMapillaryLayer = function() {
         mapillaryLayer.enable(!mapillaryLayer.enable());
+        dispatch.change();
+    };
+    background.showsRealtimeLayer = function() {
+        return realtimeLayer.enable();
+    };
+
+    background.toggleRealtimeLayer = function() {
+        realtimeLayer.enable(!realtimeLayer.enable());
         dispatch.change();
     };
 
