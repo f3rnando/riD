@@ -70,6 +70,7 @@ function getLanguage(resource) {
         request.get(url, { auth : auth },
             function(err, resp, body) {
             if (err) return callback(err);
+            console.log('requesting: ' + code);
             callback(null, yaml.load(JSON.parse(body).content)[code]);
         });
     };
@@ -97,6 +98,7 @@ function asyncMap(inputs, func, callback) {
             if (err) error = err;
             results[i] = data;
             remaining --;
+            console.log('remaining: ' + remaining);
             if (!remaining) callback(error, results);
         });
     });
