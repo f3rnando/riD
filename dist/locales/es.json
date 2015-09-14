@@ -471,6 +471,10 @@
         "title": "Superposición de fotos (Mapillary)",
         "view_on_mapillary": "Ver esta imagen en Mapillary"
     },
+    "realtime": {
+        "tooltip": "Ver actividad de otros colaboradores en la zona.",
+        "title": "Actividad en tiempo real (con chat)"
+    },
     "help": {
         "title": "Ayuda",
         "help": "# Ayuda\n\nEste es un editor para [OpenStreetMap](http://www.openstreetmap.org/), el\nmapa libre y editable del mundo. Se puede utilizar para agregar y actualizar\ndatos en su área, haciendo el mapa de fuente abierto y de datos abiertos del mundo\nmejor para todos.\n\nLas ediciones que realice en este mapa serán visible a todos los que usen\nOpenStreetMap. Con el fin de hacer una edición, tendrá que\n[Iniciar sesión](https://www.openstreetmap.org/login).\n\n\nEl [editor iD](http://ideditor.com/) es un proyecto colaborativo con [código\nfuente disponible en GitHub](https://github.com/openstreetmap/iD).\n",
