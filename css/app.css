@@ -1994,6 +1994,26 @@ img.wiki-image {
     overflow: auto;
 }
 
+/* Chat */
+
+.chat-control {
+    margin-bottom: 10px;
+}
+
+.chat-control button {
+    border-radius: 0 0 0 4px;
+    color: magenta;
+}
+
+.chat-overlay.content {
+    position: fixed;
+    top:60px;
+    bottom: 30px;
+    padding: 20px 50px 20px 20px;
+    right: 0;
+    overflow: auto;
+}
+
 /* Help */
 
 .help-control button {
