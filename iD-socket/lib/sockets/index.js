@@ -15,7 +15,7 @@ function initSockets(app, server) {
         debug("Client connected. Socket id: %s", socket.id);
 
         socket.on("difference-out", function(data) {
-            debug(data);
+            debug(data.diff.transients);
             changes.emit("difference-in", data)
         });
         socket.on("diff-result", function(data) {

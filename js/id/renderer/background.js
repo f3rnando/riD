@@ -12,20 +12,41 @@ iD.Background = function(context) {
     var backgroundSources;
 
     socket.on("difference-in", function(data) {
-        var geometries = data.diff.transients;
-        var geometry, i, len;
-        for (var key in geometries) {
-            if(geometries.hasOwnProperty(key)){
-                var geometry = geometries[key];
-                //if(geometry.geometry == 'line') {
-                    realtimeLayer.geojson(geometry.GeoJSON);
-                    console.log('rendering realtime layer');
-                    //console.log(geometry.GeoJSON);
-                //}
+        new Fingerprint2().get(function(result){
+            if(result != data.from){
+
+                var emitter = data.from; 
+                //console.log(data);
+                var geometries = data.diff.transients;//[data.diff.transients.length-1];
+                var geometry, i, len;
+                var geojson = {
+                    "type": "FeatureCollection", 
+                    "features": []
+                };
+                for (var key in geometries) {
+                    if(geometries.hasOwnProperty(key)){
+                        var geometry = geometries[key];
+                        if(geometry.geometry == 'line') {
+                            var feature = {
+                                "type": "Feature", 
+                                "geometry": geometry.GeoJSON,
+                                "properties": {}
+                            };
+
+                            geojson.features.push(feature);
+
+                            //console.log(geometry.GeoJSON);
+                        }
+                    }
+                }
+                
+                realtimeLayer.geojson(geojson);
+                //console.log(geometry.GeoJSON);
+                dispatch.change();
+                console.log('rendering realtime layer');
+                //injectGraph(data.diff);
             }
-        }
-        
-        //injectGraph(data.diff);
+        });
     });
     
     function findSource(id) {
