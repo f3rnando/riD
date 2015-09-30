@@ -87,6 +87,10 @@ iD.ui = function(context) {
             .attr('class', 'map-control help-control')
             .call(iD.ui.Help(context));
 
+        //controls.append('div')
+        //    .attr('class', 'map-control chat-control')
+        //    .call(iD.ui.Chat(context));
+
         var about = content.append('div')
             .attr('id', 'about');
 
