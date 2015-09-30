@@ -29,15 +29,17 @@ iD.History = function(context) {
     }
 
     function change(previous) {
-        var difference = iD.Difference(previous, history.graph());
-        console.log(history.graph());
+        var graph = history.graph()
+        var difference = iD.Difference(previous, graph);
         dispatch.change(difference);
 
         // Realtime hijack
-        console.log('difference-out');
-        socket.emit('difference-out', {
-            'diff': difference,
-            'from': ''
+
+        new Fingerprint2().get(function(result){
+            socket.emit('difference-out', {
+                'diff': graph,
+                'from': result
+            });
         });
         //
         return difference;
@@ -45,7 +47,6 @@ iD.History = function(context) {
 
     function injectGraph(differencein) {
         var difference = iD.Difference(stack[index].graph, differencein);
-        console.log(differencein);
         dispatch.change(difference);
         return difference;
     }
