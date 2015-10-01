@@ -237,9 +237,10 @@
         <script src='js/id/validate.js'></script>
 
         <script src='js/lib/locale.js'></script>
+        <script src='js/lib/geohash.js'></script>
         <script src='data/introGraph.js'></script>
         <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-        <script src="http://localhost:3008/socket.io/socket.io.js"></script>
+        <script src="https://cdn.socket.io/socket.io-1.0.0.js"></script>
     </head>
     <body>
         <div id='id-container'></div>
@@ -273,7 +274,19 @@
             });
         </script>
         <script>
-            var socket = io('http://localhost:3008/');
+            var socket_connect = function (room) {
+                return io('localhost:3008', {
+                    query: 'r_var='+room
+                });
+            }
+            var params = location.hash.split('/');
+            var lat = params[params.length-2];
+            var lng = params[params.length-1];
+            var geohash = encodeGeoHash(lat, lng).substr(0,4);
+
+            console.log(geohash);
+            var socket = socket_connect(geohash);
+
         </script>
     </body>
 </html>

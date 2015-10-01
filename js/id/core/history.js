@@ -2,10 +2,14 @@ iD.History = function(context) {
 
 
 
-    var stack, index, tree,
+    var stack, index, tree, fingerprint,
         imageryUsed = ['Bing'],
         dispatch = d3.dispatch('change', 'undone', 'redone'),
         lock = iD.util.SessionMutex('lock');
+
+    new Fingerprint2().get(function(result){
+        fingerprint = result;
+    });
 
     function perform(actions) {
         actions = Array.prototype.slice.call(actions);
@@ -28,20 +32,30 @@ iD.History = function(context) {
         };
     }
 
+    function emit(data){
+        socket.emit('difference-out', data);
+    }
+
     function change(previous) {
-        var graph = history.graph()
+        var graph = history.graph();
         var difference = iD.Difference(previous, graph);
         dispatch.change(difference);
-
+        var geometries = graph.transients;
         // Realtime hijack
-
-        new Fingerprint2().get(function(result){
-            socket.emit('difference-out', {
-                'diff': graph,
-                'from': result
+        for (var key in geometries) {
+            if(geometries.hasOwnProperty(key)){
+                var geometry = geometries[key];
+                if(geometry.geometry != 'line') {
+                    delete geometries[key];
+                }
+            }
+        }
+        if(typeof fingerprint != 'undefined'){
+            emit({
+                'diff': geometries,
+                'from': fingerprint
             });
-        });
-        //
+        }
         return difference;
     }
 

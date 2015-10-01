@@ -9,15 +9,22 @@ iD.Background = function(context) {
         mapillaryLayer = iD.MapillaryLayer(context),
         overlayLayers = [];
 
-    var backgroundSources;
+    var backgroundSources, fingerprint;
 
     socket.on("difference-in", function(data) {
-        new Fingerprint2().get(function(result){
-            if(result != data.from){
+
+        if(typeof fingerprint == 'undefined'){
+            new Fingerprint2().get(function(result){
+                fingerprint = result;
+            });
+        }else{
+
+            if(fingerprint != data.from){
 
                 var emitter = data.from; 
                 //console.log(data);
-                var geometries = data.diff.transients;//[data.diff.transients.length-1];
+                //var geometries = data.diff.transients;//[data.diff.transients.length-1]; //shows the latest feature, this makes it faster
+                var geometries = data.diff;
                 var geometry, i, len;
                 var geojson = {
                     "type": "FeatureCollection", 
@@ -32,21 +39,15 @@ iD.Background = function(context) {
                                 "geometry": geometry.GeoJSON,
                                 "properties": {}
                             };
-
                             geojson.features.push(feature);
-
-                            //console.log(geometry.GeoJSON);
                         }
                     }
                 }
                 
                 realtimeLayer.geojson(geojson);
-                //console.log(geometry.GeoJSON);
                 dispatch.change();
-                console.log('rendering realtime layer');
-                //injectGraph(data.diff);
             }
-        });
+        }
     });
     
     function findSource(id) {

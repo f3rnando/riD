@@ -5,7 +5,6 @@ iD.RealtimeLayer = function(context) {
         svg;
 
     function render(selection) {
-        console.log(gj);
         svg = selection.selectAll('svg')
             .data([render]);
 
@@ -29,29 +28,6 @@ iD.RealtimeLayer = function(context) {
         paths
             .attr('d', path);
 
-        if (typeof gj.features !== 'undefined') {
-            svg
-                .selectAll('text')
-                .remove();
-
-            svg
-                .selectAll('path')
-                .data(gj.features)
-                .enter()
-                .append('text')
-                .attr('class', 'realtime')
-                .text(function(d) {
-                    return d.properties.desc || d.properties.name;
-                })
-                .attr('x', function(d) {
-                    var centroid = path.centroid(d);
-                    return centroid[0] + 5;
-                })
-                .attr('y', function(d) {
-                    var centroid = path.centroid(d);
-                    return centroid[1];
-                });
-        }
     }
 
     render.projection = function(_) {
@@ -67,7 +43,6 @@ iD.RealtimeLayer = function(context) {
     };
 
     render.geojson = function(_) {
-        console.log(arguments.length);
         if (!arguments.length) return gj;
         gj = _;
         return render;
