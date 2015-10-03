@@ -1175,7 +1175,6 @@ div.layer-realtime {
 }
 
 path.realtime {
-    stroke: #FF26D4;
     stroke-width: 20;
     stroke-opacity: .4;
     fill: none;

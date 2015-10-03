@@ -15,18 +15,28 @@ iD.RealtimeLayer = function(context) {
 
         var paths = svg
             .selectAll('path')
-            .data([gj]);
+            .data([gj])
+            .attr('stroke', function(d){ 
+                console.log(d);
+                if(typeof d.properties == 'undefined'){
+                    return;
+                } else {
+                    return d.properties.color;
+                }
+            });
+
+        path = d3.geo.path()
+            .projection(projection);
+
+        paths
+            .attr('d', path);
 
         paths
             .enter()
             .append('path')
             .attr('class', 'realtime');
 
-        var path = d3.geo.path()
-            .projection(projection);
 
-        paths
-            .attr('d', path);
 
     }
 
