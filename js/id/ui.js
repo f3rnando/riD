@@ -68,6 +68,10 @@ iD.ui = function(context) {
             .attr('class', 'map-controls');
 
         controls.append('div')
+            .attr('class', 'map-control chat')
+            .call(iD.ui.Chat(context));
+
+        controls.append('div')
             .attr('class', 'map-control zoombuttons')
             .call(iD.ui.Zoom(context));
 
@@ -87,10 +91,6 @@ iD.ui = function(context) {
             .attr('class', 'map-control help-control')
             .call(iD.ui.Help(context));
 
-        //controls.append('div')
-        //    .attr('class', 'map-control chat-control')
-        //    .call(iD.ui.Chat(context));
-
         var about = content.append('div')
             .attr('id', 'about');
 
@@ -103,8 +103,48 @@ iD.ui = function(context) {
             .attr('class', 'fillD');
 
         footer.append('div')
+            .attr('class', 'chat-box')
+            .attr('style', 'height: 250px; display:none')
+            .append('div').append('div')
+                .attr('class','chat-log')
+                .attr('style','padding:10px; height:220px; overflow-y:auto; max-height:220px;')
+        
+        d3.select('.chat-box').append('div').attr('style','padding:0 10px 0 10px;')
+            .append('input')
+            .attr('type', 'text')
+            .attr('class','chat-input')
+            .attr('style','height:28px;background-color:white; color:black;');
+        d3.select('.chat-input')
+            .on("keydown", function(d) {
+                if(d3.event.which=='13'){
+                    socket.emit('msg', {from: fingerprint, msg: d3.select('.chat-input').value()});
+                    d3.select('.chat-input').value('');
+                }
+                //socket.emit('typing',{});
+                //if()
+            });
+        socket.on("msg", function(msg) {
+            console.log(msg);
+            var message = d3.select('.chat-log').append('div').attr('class','chat-msg')
+                .attr('style', 'display:block');
+
+            message
+                .append('span')
+                .attr('style', 'background-color:#' + msg.from.substr(0,6))
+                .html('&nbsp;&nbsp;&nbsp;&nbsp;');
+            message
+                .append('span')
+                .html(' ' + msg.from.substr(0,6) + ': ');
+            message
+                .append('span')
+                .html(msg.msg);
+        });  
+
+
+        footer.append('div')
             .attr('class', 'api-status')
             .call(iD.ui.Status(context));
+
 
         footer.append('div')
             .attr('id', 'scale-block')

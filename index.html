@@ -83,6 +83,7 @@
         <script src='js/id/ui/radial_menu.js'></script>
         <script src='js/id/ui/inspector.js'></script>
         <script src='js/id/ui/modal.js'></script>
+        <script src='js/id/ui/chat.js'></script>
         <script src='js/id/ui/cmd.js'></script>
         <script src='js/id/ui/confirm.js'></script>
         <script src='js/id/ui/conflicts.js'></script>
@@ -283,7 +284,10 @@
             var lat = params[params.length-2];
             var lng = params[params.length-1];
             var geohash = encodeGeoHash(lat, lng).substr(0,4);
-
+            var fingerprint;
+            new Fingerprint2().get(function(result){
+                fingerprint = result;
+            });
             console.log(geohash);
             var socket = socket_connect(geohash);
 

@@ -9,6 +9,8 @@ io.on('connection', function(socket){
   socket.join(room);
   console.log('user joined georoom #'+room);
 
+  io.to(room).emit('msg', {from:'riD', msg: 'o/'});
+
   socket.on('disconnect', function() {
     socket.leave(room)
     console.log('user disconnected');
@@ -18,6 +20,10 @@ io.on('connection', function(socket){
     io.to(room).emit('difference-in', data);
   });
 
+  socket.on('msg', function(msg){
+    io.to(room).emit('msg', msg);
+  });
+
 });
 
-server.listen(3008);
+server.listen(process.env.PORT || 3008);

@@ -28,7 +28,11 @@ iD.Background = function(context) {
                 var geometry, i, len;
                 var geojson = {
                     "type": "FeatureCollection", 
-                    "features": []
+                    "features": [],
+                    "properties": { 
+                        "color": "#" + data.from.substr(0,6),
+                        "from": data.from
+                    }
                 };
                 for (var key in geometries) {
                     if(geometries.hasOwnProperty(key)){
@@ -37,7 +41,7 @@ iD.Background = function(context) {
                             var feature = {
                                 "type": "Feature", 
                                 "geometry": geometry.GeoJSON,
-                                "properties": {}
+                                "properties": { "color": "#" + data.from.substr(0,6)}
                             };
                             geojson.features.push(feature);
                         }

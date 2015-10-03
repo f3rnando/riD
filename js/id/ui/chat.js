@@ -1,25 +1,35 @@
 iD.ui.Chat = function(map) {
-    function click() {
-        //
+
+    function toggle(button) {
+        chatbox = d3.select('.chat-box');
+
+        if(button.classed('active')){
+            button.attr('class','chat-toggle');
+            chatbox.attr('style','display:none');
+            //console.log('chat disabled')
+            //Should we add something to close the socket connection?
+        }else{
+            button.attr('class','chat-toggle active');
+            //console.log('chat activated');
+            chatbox.attr('style','display:auto');
+        }
     }
 
-    function getRoom() { }
-
-    function getGeohash() { }
-
-    function setExtent(position) {
-        var extent = iD.geo.Extent([position.coords.longitude, position.coords.latitude])
-            .padByMeters(position.coords.accuracy);
-
-        map.centerZoom(extent.center(), Math.min(20, map.extentZoom(extent)));
+    function click(button) {
+        console.log('click');
+        button = d3.select('.chat-toggle');
+        toggle(button);
+        
     }
 
     function error() { }
 
+    
     return function(selection) {
-        
+
         var button = selection.append('button')
             .attr('tabindex', -1)
+            .attr('class', 'chat-toggle')
             .attr('title', t('chat.title'))
             .on('click', click)
             .call(bootstrap.tooltip()
