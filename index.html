@@ -276,7 +276,7 @@
         </script>
         <script>
             var socket_connect = function (room) {
-                return io('localhost:3008', {
+                return io('http://id-socket.scalingo.io:80', {
                     query: 'r_var='+room
                 });
             }
