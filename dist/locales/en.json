@@ -496,7 +496,8 @@
         "title": "Realtime activity layer (w/Chat)"
     },
     "chat": {
-        "title": "Chat with geohash based rooms"
+        "title": "Chat with geohash based rooms",
+        "motd": "This is the chat room for the geohash"
     },
     "help": {
         "title": "Help",
